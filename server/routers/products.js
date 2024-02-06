@@ -35,7 +35,7 @@ router.get("/showall", async (req, res) => {
     });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/get/:id", async (req, res) => {
   await Product.findById(req.params.id)
     .then((pr) => {
       console.log("found the product " + pr.name);
@@ -44,6 +44,18 @@ router.get("/:id", async (req, res) => {
     .catch((err) => {
       console.log("error while finding product by id " + err);
       res.status(500).json({ error: "error while finding product by id " });
+    });
+});
+
+router.delete("/delete/:id", async (req, res) => {
+  await Product.findByIdAndDelete(req.params.id)
+    .then((pr) => {
+      console.log(pr.name + " is deleted");
+      res.status(200).json(pr.name + " Deleted success fully");
+    })
+    .catch((err) => {
+      console.log("error while deleting product " + err);
+      res.status(500).json({ error: "Error while deleting product." });
     });
 });
 
