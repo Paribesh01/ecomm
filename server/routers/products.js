@@ -35,4 +35,16 @@ router.get("/showall", async (req, res) => {
     });
 });
 
+router.get("/:id", async (req, res) => {
+  await Product.findById(req.params.id)
+    .then((pr) => {
+      console.log("found the product " + pr.name);
+      res.status(200).json(pr);
+    })
+    .catch((err) => {
+      console.log("error while finding product by id " + err);
+      res.status(500).json({ error: "error while finding product by id " });
+    });
+});
+
 module.exports = router;
