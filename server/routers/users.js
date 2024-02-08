@@ -42,12 +42,7 @@ router.post("/signin", async (req, res) => {
         );
         console.log(newUser.email + " is created!!");
 
-        res
-          .cookie("token", token, {
-            httpOnly: true,
-          })
-          .status(200)
-          .json(newUser);
+        res.cookie("token", token).status(200).json({ success: true });
       } catch (error) {
         console.error("Error while creating a user", error);
         res.status(500).json({ error: "Error while creating a user" });
@@ -86,12 +81,7 @@ router.post("/login", async (req, res) => {
           SECRET
         );
 
-        return res
-          .cookie("token", token, {
-            httpOnly: true,
-          })
-          .status(200)
-          .send("Welcome " + user.email);
+        return res.cookie("token", token).status(200).json({ success: true });
       } else {
         console.log("Wrong password!!");
         return res.status(401).json({ error: "Incorrect password" });
