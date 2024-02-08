@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/product");
+const auth = require("../middle/auth");
 
-router.post("/add", async (req, res) => {
+router.post("/add", auth, async (req, res) => {
   const { name, price, description } = req.body;
 
   const newProduct = new Product({
@@ -23,7 +24,7 @@ router.post("/add", async (req, res) => {
     });
 });
 
-router.get("/showall", async (req, res) => {
+router.get("/showall", auth, async (req, res) => {
   await Product.find({})
     .then((prr) => {
       console.log("found all the products");
@@ -35,7 +36,7 @@ router.get("/showall", async (req, res) => {
     });
 });
 
-router.get("/get/:id", async (req, res) => {
+router.get("/get/:id", auth, async (req, res) => {
   await Product.findById(req.params.id)
     .then((pr) => {
       console.log("found the product " + pr.name);
@@ -47,7 +48,7 @@ router.get("/get/:id", async (req, res) => {
     });
 });
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", auth, async (req, res) => {
   await Product.findByIdAndDelete(req.params.id)
     .then((pr) => {
       console.log(pr.name + " is deleted");

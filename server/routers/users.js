@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const SECRET = process.env.SECRET;
 
 router.post("/signin", async (req, res) => {
   try {
@@ -27,9 +30,24 @@ router.post("/signin", async (req, res) => {
       try {
         // Create a new user with hashed password
         const newUser = new User({ email: email, password: hash });
-        await newUser.save();
+        const savedUser = await newUser.save();
+
+        // token for signin
+
+        const token = jwt.sign(
+          {
+            user: savedUser._id,
+          },
+          SECRET
+        );
         console.log(newUser.email + " is created!!");
-        res.status(200).json(newUser);
+
+        res
+          .cookie("token", token, {
+            httpOnly: true,
+          })
+          .status(200)
+          .json(newUser);
       } catch (error) {
         console.error("Error while creating a user", error);
         res.status(500).json({ error: "Error while creating a user" });
@@ -61,7 +79,19 @@ router.post("/login", async (req, res) => {
       }
       if (result) {
         console.log("Password matched, login!!");
-        return res.status(200).send("Welcome " + user.email);
+        const token = jwt.sign(
+          {
+            user: user._id,
+          },
+          SECRET
+        );
+
+        return res
+          .cookie("token", token, {
+            httpOnly: true,
+          })
+          .status(200)
+          .send("Welcome " + user.email);
       } else {
         console.log("Wrong password!!");
         return res.status(401).json({ error: "Incorrect password" });
@@ -71,6 +101,15 @@ router.post("/login", async (req, res) => {
     console.error("Error while logging in the user", err);
     res.status(500).json({ error: "Error while logging in a user." });
   }
+});
+
+router.get("/logout", (req, res) => {
+  res
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    })
+    .send("Logouted");
 });
 
 module.exports = router;
