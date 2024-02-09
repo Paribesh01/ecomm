@@ -11,6 +11,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  products: [{ type: mongoose.Schema.Types.ObjectId }],
 });
 
 const User = mongoose.model("user", userSchema);
