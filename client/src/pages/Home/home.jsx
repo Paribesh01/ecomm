@@ -7,8 +7,8 @@ const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState("");
 
+  const token = Cookies.get("token"); // Retrieve the token cookie
   useEffect(() => {
-    const token = Cookies.get("token"); // Retrieve the token cookie
     console.log(token);
     const verifyToken = async () => {
       if (!token) {
@@ -33,9 +33,19 @@ const Home = () => {
       }
     };
     verifyToken();
-  }, [navigate]);
+  }, [token, navigate]);
 
-  return <div>hello {user}</div>;
+  const Logout = () => {
+    Cookies.remove("token");
+    navigate("/login");
+  };
+
+  return (
+    <div>
+      hello {user}
+      <button onClick={Logout}>LogOut</button>
+    </div>
+  );
 };
 
 export default Home;

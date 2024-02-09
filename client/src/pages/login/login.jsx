@@ -30,7 +30,10 @@ const Home = () => {
       } else {
         alert(res.data.error);
       }
-    } catch {}
+    } catch {
+      alert("Error");
+      console.log("Error while login ");
+    }
   };
 
   return (
@@ -54,7 +57,7 @@ const Home = () => {
         />
         <button type="submit">Submit</button>
         <span>
-          Already have an account? <Link to={"/signup"}>Signup</Link>
+          Don't have an account? <Link to={"/signup"}>Signup</Link>
         </span>
       </form>
     </div>
