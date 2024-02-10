@@ -94,12 +94,13 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
+  console.log("Logouted");
   res
     .cookie("token", "", {
       httpOnly: true,
       expires: new Date(0),
     })
-    .send("Logouted");
+    .json({ message: "Logouted" });
 });
 
 module.exports = router;
