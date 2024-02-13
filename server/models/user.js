@@ -11,8 +11,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog", // Reference to the Product model
+    },
+  ],
 });
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

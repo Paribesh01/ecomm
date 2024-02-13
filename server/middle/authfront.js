@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 module.exports = userVerify = (req, res) => {
   const token = req.cookies.token;
+  // console.log(token + " from verifyyyy");
   if (!token) {
     return res.status(401).json({ error: "unauthorized user" });
   }
@@ -18,7 +19,7 @@ module.exports = userVerify = (req, res) => {
       if (user) {
         return res.json({ user: user });
       } else {
-        return res.status(401).json({ error: "User not found" });
+        return res.status(401).json({ error: "User not found saiiii" });
       }
     } catch (error) {
       console.error(error);

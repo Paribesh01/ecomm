@@ -1,6 +1,6 @@
 const express = require("express");
 const dbconn = require("./dbconn/db");
-const productRouter = require("./routers/products");
+const blogRouter = require("./routers/blogs"); // Updated import
 const userRouter = require("./routers/users");
 const authRouter = require("./middle/authfront");
 const cookieParser = require("cookie-parser");
@@ -21,7 +21,7 @@ app.use(
 app.options("*", cors());
 
 app.use("/verify", authRouter);
-app.use("/product", productRouter);
+app.use("/blog", blogRouter); // Updated route
 app.use("/user", userRouter);
 
 app.listen(4000, (req, res) => {
