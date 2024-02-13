@@ -3,7 +3,7 @@ require("dotenv").config();
 function auth(req, res, next) {
   try {
     const token = req.cookies.token;
-    console.log(token);
+    console.log("token in auth " + token);
     if (!token) return res.status(401).json({ errorMessage: "Unauthorized" });
 
     const verified = jwt.verify(token, process.env.SECRET);

@@ -11,10 +11,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  products: [
+  blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product", // Reference to the Product model
+      ref: "Blog", // Reference to the Product model
     },
   ],
 });

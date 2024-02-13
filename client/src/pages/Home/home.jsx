@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Box from "../../components/Box";
 
 const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState("");
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
   const [des, setdes] = useState("");
+  const [blogs, setBlogs] = useState([]);
 
   const token = Cookies.get("token"); // Retrieve the token cookie
   useEffect(() => {
@@ -35,25 +36,43 @@ const Home = () => {
       }
     };
     verifyToken();
-  }, [token, navigate]);
+
+    // featching product for the user
+
+    const showBlogs = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/blog/showall", {
+          withCredentials: true,
+        });
+        if (response) {
+          console.log(response.data);
+          setBlogs(response.data);
+        }
+      } catch {
+        console.log("Error while fetching products");
+      }
+    };
+    showBlogs();
+  }, [token, navigate, blogs]);
 
   const Logout = async () => {
-    Cookies.remove("token");
-    console.log("Logged out");
-    await axios.get(
-      "http://localhost:4000/user/logout",
-      {},
-      { withCredentials: true }
-    );
-    navigate("/login");
+    // Send request to server to logout
+    try {
+      await axios.get("http://localhost:4000/user/logout", {
+        withCredentials: true,
+      });
+      console.log("Logged out");
+      // Redirect to login page or any other appropriate action after successful logout
+      navigate("/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   const nameChange = (e) => {
     setName(e.target.value);
   };
-  const priceChange = (e) => {
-    setPrice(e.target.value);
-  };
+
   const desChange = (e) => {
     setdes(e.target.value);
   };
@@ -64,15 +83,13 @@ const Home = () => {
     const data = await axios.post(
       "http://localhost:4000/product/add",
       {
-        name: name,
-        price: price,
+        title: name,
         description: des,
       },
       { withCredentials: true }
     );
     console.log(data);
     setName("");
-    setPrice("");
     setdes("");
   };
 
@@ -91,13 +108,7 @@ const Home = () => {
             placeholder="Enter product's name"
             onChange={nameChange}
           />
-          <input
-            type="number"
-            name="price"
-            value={price}
-            placeholder="Enter product's price"
-            onChange={priceChange}
-          />
+
           <input
             type="text"
             name="des"
@@ -107,6 +118,20 @@ const Home = () => {
           />
           <button type="sumbit">Add</button>
         </form>
+      </div>
+      <div>
+        <h1>Products:</h1>
+        <ul className="grid  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+          {blogs.map((blog, index) => (
+            <Box id={index} title={blog.title} text={blog.description} />
+
+            // <li key={index}>
+            //   <h3>{product.name}</h3>
+            //   <p>Price: {product.price}</p>
+            //   <p>Description: {product.description}</p>
+            // </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

@@ -1,0 +1,14 @@
+.table{
+    height: 498px;
+    width: 360px;
+    background-color: rgb(255, 255, 255);
+}
+.image{
+    height: 249px;
+    width: 360px;
+}
+.im{
+    height:  249px;   
+    width: 100%;
+    object-fit: cover;
+}
